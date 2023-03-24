@@ -12,18 +12,10 @@
 
 # 关于环境
 
-如果可以，直接 conda activate 我们在下面提到的环境。如果需要自己新建环境，除直接运行代码，缺什么安装什么外，我们改了两处库函数。
+实验环境在`baseline.yaml`中。需要的库主要有 pytorch, torchvision, pycocotools。
 
-一个是直接下下来的torch库load VOCSegmentation(_VOCBase)类时由于提供的数据路径问题会报路径错误，需要改 _VOCBase 的代码：
-
-```
-# 107行开始，改为如下的
-base_dir = dataset_year_dict["base_dir"]
-# voc_root = os.path.join(self.root, base_dir) # 注释掉
-voc_root = self.root # 改成这个
-```
-
-二是retinanet的convactivation层由于nn.relu在默认参数上，无法在aciq的换层中被替换，需要将该nn.relu写在函数体里才能够替换。
+此外关于aciq部分我们改了一处库函数。
+retinanet的convactivation层由于nn.relu在默认参数上，无法在aciq的换层中被替换，需要将该nn.relu写在函数体里才能够替换。
 
 ```
 # 从aciq/utils/mark_relu.py中找到Conv2dNormActivation类的库文件位置，152行开始，即在super().__init__前，增加如下的
